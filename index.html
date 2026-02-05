@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHΞN™ intelligent v2ray splitter</title>
+    <title>SHΞN™ Intelligent V2Ray Splitter</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -162,14 +162,14 @@
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="text-xl font-bold flex items-center text-white">
                         <span class="w-2 h-6 bg-blue-500 rounded-full ml-3"></span>
-                        ورودی منابع کانفیگ
+                        منابع کانفیگ
                     </h2>
-                    <span class="text-xs text-gray-400 bg-black/40 px-2 py-1 rounded">لینک / متن / فایل</span>
+                    <span class="text-xs text-gray-400 bg-black/40 px-2 py-1 rounded">لینک-متن-فایل</span>
                 </div>
                 
                 <div class="relative group">
                     <!-- Text Area -->
-                    <textarea id="mainInput" rows="5" class="cyber-textarea w-full rounded-xl p-4 text-sm pr-12" placeholder="هرچیزی داری اینجا بریز!&#10;- لینک سابسکریپشن (تکی یا چندتایی)&#10;- کانفیگ‌های Vmess/Vless...&#10;- یا فایل تکست خود را با دکمه گیره ضمیمه کن..."></textarea>
+                    <textarea id="mainInput" rows="5" class="cyber-textarea w-full rounded-xl p-4 text-sm pr-12" placeholder="منابع خود را اینجا وارد کنید...&#10;- لینک‌های Subscription (شناسایی و دانلود خودکار)&#10;- کانفیگ‌های متنی Vmess/Vless...&#10;- یا فایل تکست خود را ضمیمه کنید"></textarea>
                     
                     <!-- Attachment Button (Inside Textarea) -->
                     <div class="absolute top-3 left-3 z-20">
@@ -198,7 +198,7 @@
                         <div class="bg-blue-500/10 border border-blue-500/20 rounded-xl p-3 mb-4 text-justify">
                             <p class="text-xs text-gray-300 leading-6">
                                 <i class="fas fa-robot text-blue-400 ml-1"></i>
-                                <strong>الگویابی خودکار:</strong> در این حالت، سیستم منابع ورودی بالا را با نمونه‌ کانفیگهایی که تجربه ی اتصال موفق روی آنها داشتید (ورودی پایین) مقایسه کرده و مشابه آنها را گزینش می‌کند.
+                                <strong>الگویابی خودکار:</strong> در این حالت، سیستم منابع ورودی بالا را با نمونه‌ کانفیگ‌هایی که تجربه اتصال موفق روی آنها داشتید (ورودی پایین) مقایسه کرده و مشابه آنها را گزینش می‌کند.
                             </p>
                         </div>
                         <div class="auto-placeholder rounded-xl p-4 text-center hover:bg-black/20 transition relative">
@@ -224,7 +224,7 @@
                             </div>
                         </div>
                         <div class="mt-4">
-                            <label class="text-xs text-gray-500 uppercase font-bold mb-2 block">پورت‌های مجاز</label>
+                            <label class="text-xs text-gray-500 uppercase font-bold mb-2 block">پورت‌های منتخب</label>
                             <input type="text" id="portFilter" class="cyber-textarea w-full rounded-lg p-2 text-sm text-left h-10" dir="ltr" placeholder="443, 2053, 80...">
                         </div>
                     </div>
@@ -233,8 +233,8 @@
             
             <!-- ONE BIG BUTTON -->
             <button onclick="processEverything()" id="mainBtn" class="btn-action w-full py-5 rounded-2xl shadow-xl shadow-blue-500/10 flex items-center justify-center gap-3 text-xl z-20 group">
-                <i class="fas fa-bolt text-yellow-300 group-hover:animate-pulse"></i>
-                <span>شروع عملیات جادویی</span>
+                <i class="fas fa-microchip text-blue-800 group-hover:animate-pulse"></i>
+                <span></span> پـردازش و استـخراج</span>
             </button>
 
         </div>
@@ -255,15 +255,14 @@
                 </div>
                 <div id="logArea" class="flex-grow p-4 font-mono text-xs overflow-y-auto space-y-1 h-64 bg-black/20 scroll-smooth">
                     <div class="log-line text-gray-500">> System Ready.</div>
-                    <div class="log-line text-gray-500">> Waiting for user input...</div>
+                    <div class="log-line text-gray-500">> Waiting for input sources...</div>
                 </div>
             </div>
 
             <!-- Results -->
             <div class="glass-panel rounded-2xl p-6 relative">
-                <div class="absolute top-4 left-4 text-xs text-gray-500 font-mono border border-gray-700 rounded px-2">🎛️ SHΞЯVIN™</div>
                 
-                <div class="text-center mb-6">
+                <div class="text-center mb-6 pt-4">
                     <div class="text-sm text-gray-400 mb-1">کانفیگ‌های استخراج شده</div>
                     <div class="text-5xl font-black text-white tracking-tighter drop-shadow-lg" id="finalCount">0</div>
                 </div>
@@ -295,10 +294,16 @@
     <!-- LOGIC -->
     <script>
         // --- CONSTANTS ---
-        const REMARK_NAME = "SHΞЯVIN™ Splitter";
+        const REMARK_NAME = "SHΞЯVIN™";
         const PROTOCOLS = ['vmess', 'vless', 'ss', 'trojan', 'hysteria', 'hysteria2'];
         const NETS = ['ws', 'grpc', 'tcp', 'http', 'h2', 'quic'];
         
+        // Proxy list for robust fetching on GitHub Pages
+        const PROXIES = [
+            'https://api.allorigins.win/raw?url=',
+            'https://corsproxy.io/?'
+        ];
+
         let processedConfigs = [];
         let sampleStats = null;
         let currentMode = 'smart';
@@ -306,9 +311,7 @@
         // --- INIT ---
         document.addEventListener('DOMContentLoaded', () => {
             renderFilters();
-            // Handle File Input
             document.getElementById('fileInput').addEventListener('change', handleFileUpload);
-            // Handle Sample Input for auto-analysis
             document.getElementById('sampleInput').addEventListener('input', (e) => analyzeSamples(e.target.value));
         });
 
@@ -361,58 +364,81 @@
             reader.readAsText(file);
         }
 
+        // --- ROBUST FETCH ---
+        async function fetchWithProxy(url) {
+            // 1. Try Direct Fetch first
+            try {
+                const controller = new AbortController();
+                const id = setTimeout(() => controller.abort(), 3000); // 3s fast timeout
+                const res = await fetch(url, { signal: controller.signal });
+                clearTimeout(id);
+                if(res.ok) return await res.text();
+            } catch(e) { 
+                // Direct failed (likely CORS), moving to proxies
+            }
+
+            // 2. Try Proxies
+            for (const proxy of PROXIES) {
+                try {
+                    const target = proxy + encodeURIComponent(url);
+                    const controller = new AbortController();
+                    const id = setTimeout(() => controller.abort(), 5000);
+                    const res = await fetch(target, { signal: controller.signal });
+                    clearTimeout(id);
+                    if(res.ok) return await res.text();
+                } catch(e) {
+                    continue;
+                }
+            }
+            throw new Error("Failed to fetch");
+        }
+
         // --- MASTER FUNCTION: PROCESS EVERYTHING ---
         async function processEverything() {
             const btn = document.getElementById('mainBtn');
             const originalText = btn.innerHTML;
-            btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> در حال پردازش...`;
+            btn.innerHTML = `<i class="fas fa-cog fa-spin"></i> در حال پردازش...`;
             btn.disabled = true;
 
             try {
-                log("Starting operation...", "info");
+                log("Initializing processing engine...", "info");
                 const rawInput = document.getElementById('mainInput').value;
                 if (!rawInput.trim()) throw new Error("ورودی خالی است!");
 
                 // 1. Separate Lines & Detect URLs
                 const lines = rawInput.split(/[\r\n\s]+/);
-                let combinedText = rawInput; // Start with raw text
-                let fetchCount = 0;
-
+                let combinedText = rawInput; 
+                
                 // 2. Fetch URLs
                 const urls = lines.filter(l => l.startsWith('http://') || l.startsWith('https://'));
                 if (urls.length > 0) {
-                    log(`Detected ${urls.length} links. Fetching content...`, "warn");
+                    log(`Detected ${urls.length} remote sources. Downloading...`, "warn");
                     
-                    // Parallel Fetch
                     const fetchPromises = urls.map(async (url) => {
                         try {
-                            const controller = new AbortController();
-                            const id = setTimeout(() => controller.abort(), 5000); // 5s timeout
-                            const res = await fetch(url, { signal: controller.signal });
-                            clearTimeout(id);
-                            if(res.ok) return await res.text();
-                            return "";
+                            const txt = await fetchWithProxy(url);
+                            log(`Fetched: ${url.substring(0,25)}...`, "success");
+                            return txt;
                         } catch(e) {
-                            log(`Fetch failed: ${url.substring(0,20)}...`, "error");
+                            log(`Fetch Error: ${url.substring(0,25)}...`, "error");
                             return "";
                         }
                     });
 
                     const fetchedResults = await Promise.all(fetchPromises);
                     fetchedResults.forEach(txt => { if(txt) combinedText += "\n" + txt; });
-                    log("Fetching complete.", "success");
                 }
 
                 // 3. Decode & Extract Configs
                 const extracted = extractConfigs(combinedText);
-                if (extracted.length === 0) throw new Error("هیچ کانفیگ سالمی یافت نشد.");
-                log(`Total raw configs found: ${extracted.length}`, "info");
+                if (extracted.length === 0) throw new Error("هیچ کانفیگ معتبری یافت نشد.");
+                log(`Analysis complete: ${extracted.length} raw configs found.`, "info");
 
-                // 4. Determine Filters (Smart vs Manual)
+                // 4. Determine Filters
                 let rules = getFilterRules();
-                log(`Applying filters: [${rules.protocols.join(', ')}] | [${rules.nets.join(', ')}]`, "info");
+                log(`Applying filters: [${rules.protocols.join(', ')}]`, "info");
 
-                // 5. Process, Remark, Dedupe
+                // 5. Process
                 const result = runProcessor(extracted, rules);
                 
                 // 6. Output
@@ -430,17 +456,15 @@
 
         // --- CORE LOGIC ---
         function extractConfigs(text) {
-            // Try detecting Base64 whole-body
             let decoded = text;
             try {
                 const clean = text.replace(/\s/g,'');
                 if (/^[a-zA-Z0-9+/=]+$/.test(clean) && clean.length > 50) {
                     decoded = decodeURIComponent(escape(window.atob(clean)));
-                    log("Base64 subscription decoded.", "success");
+                    log("Base64 subscription content decoded.", "success");
                 }
             } catch(e) {}
 
-            // Regex extraction
             const regex = /(vmess|vless|ss|trojan|hysteria|hysteria2):\/\/[a-zA-Z0-9%\-._~:/?#@!$&'()*+,;=]+/gim;
             return decoded.match(regex) || [];
         }
@@ -461,13 +485,12 @@
             });
             sampleStats = stats;
             
-            // UI Update
             document.getElementById('analysisReport').classList.remove('hidden');
             document.getElementById('res-proto').innerText = Array.from(stats.protos).join(',').toUpperCase() || "All";
             document.getElementById('res-net').innerText = Array.from(stats.nets).join(',').toUpperCase() || "TCP";
             document.getElementById('res-port').innerText = Array.from(stats.ports).slice(0,3).join(',') + (stats.ports.size>3?"...":"");
             
-            log(`Sample analyzed: Pattern extracted.`, "success");
+            log(`Pattern recognition active based on sample.`, "success");
         }
 
         function getFilterRules() {
@@ -483,7 +506,6 @@
                     return { protocols: PROTOCOLS, nets: ['ws', 'grpc', 'tcp'], ports: [] };
                 }
             } else {
-                // Manual
                 const p = Array.from(document.querySelectorAll('input[name="protocol"]:checked')).map(x=>x.value);
                 const n = Array.from(document.querySelectorAll('input[name="net"]:checked')).map(x=>x.value);
                 const portStr = document.getElementById('portFilter').value;
@@ -500,20 +522,14 @@
                 const meta = parseMeta(raw);
                 if (!meta.valid) return;
 
-                // Check Protocol
                 if (!rules.protocols.includes(meta.type)) return;
 
-                // Check Net (Loose matching)
-                // If rules.nets is empty, allow all. Otherwise check.
                 if (rules.nets.length > 0) {
                     let match = false;
-                    // If meta.net matches any allowed net
                     if (rules.nets.includes(meta.net)) match = true;
-                    // Special case: if 'ws' allowed, accept 'websocket' etc if parsed
                     if (!match) return;
                 }
 
-                // Check Port
                 if (rules.ports.length > 0) {
                     if (!rules.ports.includes(meta.port)) return;
                 }
@@ -543,20 +559,15 @@
                     json.ps = REMARK_NAME;
                     fullConfig = `vmess://${window.btoa(unescape(encodeURIComponent(JSON.stringify(json))))}`;
                 } else {
-                    // Url based
                     const urlObj = new URL(config.startsWith('http') ? config : config.replace(/^[a-z0-9]+:\/\//, 'http://')); 
-                    // Note: URL parsing hack for schemes like vless://
                     
-                    // Manual Split preferred for non-std schemes
                     const parts = config.split('?');
                     const main = parts[0];
                     const query = parts[1] ? parts[1].split('#')[0] : '';
                     
-                    // Extract port
                     const lastColon = main.lastIndexOf(':');
-                    if (lastColon > -1) port = main.substring(lastColon+1).split(/[@\/]/)[0]; // basic extraction
+                    if (lastColon > -1) port = main.substring(lastColon+1).split(/[@\/]/)[0];
 
-                    // Extract net
                     const params = new URLSearchParams(query);
                     if (params.get('type')) net = params.get('type');
                     else if (params.get('mode')) net = params.get('mode');
@@ -585,6 +596,8 @@
 
             document.getElementById('downloadBtn').disabled = count === 0;
             document.getElementById('copyBtn').disabled = count === 0;
+            
+            if(count > 0) log(`Success: ${count} configs generated.`, "success");
         }
 
         function downloadResult() {
@@ -593,7 +606,7 @@
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `SHEN_ULTIMATE_${Date.now()}.txt`;
+            a.download = `SHEN_FINAL_${Date.now()}.txt`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -606,11 +619,9 @@
             const icon = btn.querySelector('i');
             
             try {
-                // Modern API
                 await navigator.clipboard.writeText(text);
                 log("Copied to clipboard successfully.", "success");
             } catch (err) {
-                // Fallback for older browsers/http
                 const ta = document.createElement('textarea');
                 ta.value = text;
                 ta.style.position = 'fixed';
@@ -626,7 +637,6 @@
                 document.body.removeChild(ta);
             }
 
-            // Visual Feedback
             icon.className = "fas fa-check";
             btn.classList.add("bg-blue-600", "text-white");
             setTimeout(() => {
